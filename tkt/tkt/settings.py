@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOWED_ORIGINS = [
-    "https://ticketflow-fullstack.vercel.app/"
+    "https://ticketflow-fullstack.vercel.app"
 ]
 CORS_ALLOW_CREDENTIALS = True
 
