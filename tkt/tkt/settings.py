@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-xc-nn!_qf@(p6-xkejjth!+75@dpppq%b%j2fafi81thq!+jl1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ticketflow-fullstack.onrender.com",]
 
 
 # Application definition
