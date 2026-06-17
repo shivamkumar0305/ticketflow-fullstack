@@ -9,6 +9,11 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, Loader2, AlertCircle, Send, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
+interface Agent {
+  id: number
+  full_name: string
+}
+
 interface Ticket {
   id: number
   title: string
@@ -18,7 +23,7 @@ interface Ticket {
   created_at: string
   updated_at: string
   customer_email: string
-  assigned_to?: any
+  assigned_to?: Agent // Corrected type here
 }
 
 interface Comment {
@@ -38,6 +43,11 @@ const statusColors: Record<string, string> = {
   on_hold: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
 }
 
+const agentColors: Record<string, string> = { // Moved here
+  AG: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+  US: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
+}
+
 export default function TicketDetailPage() {
   const params = useParams()
   const router = useRouter()
@@ -46,11 +56,14 @@ export default function TicketDetailPage() {
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
+  const [agents, setAgents] = useState<Agent[]>([]) // Added agents state
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [newComment, setNewComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+  const [selectedAgent, setSelectedAgent] = useState<number | null>(null) // Changed to null
+  const [isAssigningAgent, setIsAssigningAgent] = useState(false)
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -61,8 +74,11 @@ export default function TicketDetailPage() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchTicketAndComments()
+      if (user?.is_staff) { // Fetch agents only if staff
+        fetchAgents()
+      }
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, user])
 
   const fetchTicketAndComments = async () => {
     setIsLoading(true)
@@ -75,6 +91,9 @@ export default function TicketDetailPage() {
         return
       }
       setTicket(ticketRes.data)
+      if (ticketRes.data?.assigned_to) {
+        setSelectedAgent(ticketRes.data.assigned_to.id) // Set initial selected agent
+      }
 
       const commentsRes = await api.comments.list(ticketId)
       if (!commentsRes.error) {
@@ -84,6 +103,17 @@ export default function TicketDetailPage() {
       setError('Failed to load ticket')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchAgents = async () => { // New function to fetch agents
+    try {
+      const res = await api.users.list()
+      if (!res.error && res.data) {
+        setAgents(res.data.filter((u: any) => u.role === 'AG').map((u: any) => ({ id: u.id, full_name: u.full_name })))
+      }
+    } catch (err) {
+      console.error('Failed to fetch agents:', err)
     }
   }
 
@@ -125,13 +155,31 @@ export default function TicketDetailPage() {
     }
   }
 
+  const handleAssignAgent = async () => { // New function to assign agent
+    if (!user?.is_staff || selectedAgent === null) return
+
+    setIsAssigningAgent(true)
+    try {
+      const res = await api.tickets.assign(ticketId, selectedAgent as number)
+      if (res.error) {
+        setError(res.error.detail || 'Failed to assign agent')
+      } else {
+        setTicket((prev) => (prev ? { ...prev, assigned_to: agents.find(a => a.id === selectedAgent) } : null))
+      }
+    } catch (err) {
+      setError('Failed to assign agent')
+    } finally {
+      setIsAssigningAgent(false)
+    }
+  }
+
   const handleDeleteComment = async (commentId: number) => {
     if (!user || (comments.find((c) => c.id === commentId)?.created_by.id !== user.id && !user.is_staff)) {
       return
     }
 
     try {
-      const res = await api.comments.delete(commentId)
+      const res = await api.comments.delete(ticketId, commentId)
       if (res.error) {
         setError(res.error.detail || 'Failed to delete comment')
       } else {
@@ -254,8 +302,8 @@ export default function TicketDetailPage() {
                 </label>
                 <div className="flex gap-2">
                   <select
-                    value={selectedAgent}
-                    onChange={(e) => setSelectedAgent(e.target.value === '' ? '' : Number(e.target.value))}
+                    value={selectedAgent === null ? '' : selectedAgent}
+                    onChange={(e) => setSelectedAgent(e.target.value === '' ? null : Number(e.target.value))}
                     disabled={isAssigningAgent}
                     className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   >
@@ -268,7 +316,7 @@ export default function TicketDetailPage() {
                   </select>
                   <Button
                     onClick={handleAssignAgent}
-                    disabled={isAssigningAgent || selectedAgent === '' || (ticket.assigned_to && ticket.assigned_to.id === selectedAgent)}
+                    disabled={isAssigningAgent || selectedAgent === null || (ticket.assigned_to && ticket.assigned_to.id === selectedAgent)}
                   >
                     {isAssigningAgent ? (
                       <>
