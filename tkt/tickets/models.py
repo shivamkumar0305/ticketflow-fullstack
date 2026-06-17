@@ -44,12 +44,11 @@ class Ticket(models.Model):
 
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete = models.SET_NULL,
-        null = True,
-        blank = True,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name = 'assigned_tickets',
-        limit_choices_to = {'is_staff' : True} #?
-
+        limit_choices_to = models.Q(is_staff=True) | models.Q(role='AG')
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

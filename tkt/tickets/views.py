@@ -50,7 +50,8 @@ class TicketsViewset(viewsets.ModelViewSet):
             )
         
         try:
-            agent = User.objects.get(id=agent_id, is_staff=True)
+            from django.db.models import Q
+            agent = User.objects.get(Q(id=agent_id) & (Q(is_staff=True) | Q(role='AG')))
         except User.DoesNotExist:
             return Response(
                 {"error":"Assignment failed. provided id is not an agent id"},
