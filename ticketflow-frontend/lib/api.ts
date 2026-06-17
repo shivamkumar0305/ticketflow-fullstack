@@ -151,6 +151,16 @@ export const api = {
       }),
   },
 
+  // User endpoints (accounts/urls.py for admin actions)
+  users: {
+    list: () => makeRequest<any[]>('/accounts/api/users/', { method: 'GET' }),
+    updateRole: (id: number, role: string) =>
+      makeRequest<any>(`/accounts/api/users/${id}/role/`, {
+        method: 'PATCH',
+        body: JSON.stringify({ role }),
+      }),
+  },
+
   // Ticket endpoints (tickets/urls.py mounted at /tickets/)
   tickets: {
     list: (params?: Record<string, any>) => {

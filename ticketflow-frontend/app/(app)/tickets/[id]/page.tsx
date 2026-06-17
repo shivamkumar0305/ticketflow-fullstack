@@ -247,6 +247,40 @@ export default function TicketDetailPage() {
                   ))}
                 </select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Assign Agent
+                </label>
+                <div className="flex gap-2">
+                  <select
+                    value={selectedAgent}
+                    onChange={(e) => setSelectedAgent(e.target.value === '' ? '' : Number(e.target.value))}
+                    disabled={isAssigningAgent}
+                    className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  >
+                    <option value="">Select an agent</option>
+                    {agents.map((agent) => (
+                      <option key={agent.id} value={agent.id}>
+                        {agent.full_name}
+                      </option>
+                    ))}
+                  </select>
+                  <Button
+                    onClick={handleAssignAgent}
+                    disabled={isAssigningAgent || selectedAgent === '' || (ticket.assigned_to && ticket.assigned_to.id === selectedAgent)}
+                  >
+                    {isAssigningAgent ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Assigning...
+                      </>
+                    ) : (
+                      'Assign'
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
 

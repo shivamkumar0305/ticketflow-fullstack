@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework import status, generics
 from .serializers import UserSerializer
+from django.contrib.auth import get_user_model
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+User = get_user_model()
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -65,3 +68,14 @@ class UserProfileView(APIView):
 
     def patch(self, request):
         return self.put(request)
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+class UserRoleUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'pk' # Use 'pk' to retrieve user by primary key

@@ -59,9 +59,9 @@ export default function AppPage() {
                 </Button>
               </Link>
               {user?.is_staff && (
-                <Link href="/admin">
+                <Link href="/admin/users">
                   <Button variant="ghost" size="sm">
-                    Admin
+                    User Management
                   </Button>
                 </Link>
               )}

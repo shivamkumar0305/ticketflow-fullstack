@@ -61,9 +61,9 @@ export default function AdminPage() {
 
     try {
       const params = filter !== 'all' ? { status: filter } : {}
-      const [ticketsRes, staffRes] = await Promise.all([
+      const [ticketsRes, usersRes] = await Promise.all([
         api.tickets.list(params),
-        api.staff.list(),
+        api.users.list(),
       ])
 
       if (ticketsRes.error) {
@@ -73,8 +73,8 @@ export default function AdminPage() {
         setTickets(ticketsRes.data || [])
       }
 
-      if (!staffRes.error) {
-        setStaffMembers(staffRes.data || [])
+      if (!usersRes.error && usersRes.data) {
+        setStaffMembers(usersRes.data.filter((u: any) => u.is_staff || u.role === 'AG').map((u: any) => ({ id: u.id, full_name: u.full_name, email: u.email })))
       }
     } catch (err) {
       setError('Failed to load data')
