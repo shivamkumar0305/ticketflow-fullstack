@@ -8,9 +8,9 @@ TicketFlow enables organizations to manage support requests efficiently through 
 
 ## 🚀 Live Demo
 
-**Frontend:** `<YOUR_FRONTEND_URL>`
+**Frontend:** `https://ticketflow-fullstack.vercel.app/`
 
-**Backend API:** `<YOUR_BACKEND_URL>`
+**Backend API:** `https://ticketflow-fullstack.onrender.com`
 
 ### Demo Accounts
 
