@@ -14,10 +14,9 @@ TicketFlow enables organizations to manage support requests efficiently through 
 
 ### Demo Accounts
 
-| Role     | Email                                                   | Password    |
-| -------- | ------------------------------------------------------- | ----------- |
-| Admin    | demo@example.com                                        | password123 |
-
+| Role  | Email                                       | Password    |
+| ----- | ------------------------------------------- | ----------- |
+| Admin | [demo@example.com](mailto:demo@example.com) | password123 |
 
 > Demo accounts are provided for recruiters and visitors to explore the application without registration.
 
@@ -27,41 +26,43 @@ TicketFlow enables organizations to manage support requests efficiently through 
 
 ## Dashboard
 
-![alt text](image.png)
+![Dashboard](screenshots/image.png)
 
 ---
 
 ## Login Page
 
-![alt text](image-1.png)
+![Login Page](screenshots/image-1.png)
 
 ---
 
 ## Ticket List
 
-![alt text](image-2.png)
+![Ticket List](screenshots/image-2.png)
 
 ---
 
 ## Ticket Details
 
-![alt text](image-3.png)
+![Ticket Details](screenshots/image-3.png)
+
 ---
 
 ## Create Ticket
 
-![alt text](image-4.png)
+![Create Ticket](screenshots/image-4.png)
 
 ---
 
 ## User Management (Admin)
 
-![alt text](image-5.png)
+![User Management](screenshots/image-5.png)
+
 ---
 
 ## Email Notification
 
-![alt text](image-6.png)
+![Email Notification](screenshots/image-6.png)
 
 ---
 
@@ -167,6 +168,15 @@ ticketflow/
 │   ├── components/
 │   ├── lib/
 │   └── package.json
+│
+├── screenshots/
+│   ├── image.png
+│   ├── image-1.png
+│   ├── image-2.png
+│   ├── image-3.png
+│   ├── image-4.png
+│   ├── image-5.png
+│   └── image-6.png
 │
 └── README.md
 ```
