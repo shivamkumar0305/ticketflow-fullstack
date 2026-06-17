@@ -42,14 +42,17 @@ export default function AppPage() {
       <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div>
-              <h1 className="text-lg font-semibold tracking-tight text-foreground">
-                Tickets
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                {user?.full_name}
-                {user?.is_staff && ' (Staff)'}
-              </p>
+            <div className="flex items-center gap-3">
+              <img src="/icon.svg" alt="Logo" className="h-8 w-8" />
+              <div>
+                <h1 className="text-lg font-semibold tracking-tight text-foreground">
+                  Tickets
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {user?.full_name}
+                  {user?.is_staff && ' (Staff)'}
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <Link href="/new">

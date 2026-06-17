@@ -13,7 +13,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'TicketFlow - Issue Tracking',
   description: 'Modern ticket management system',
-  generator: 'v0.app',
   icons: {
     icon: [
       {

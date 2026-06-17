@@ -26,14 +26,22 @@ interface TicketsListProps {
 const statusColors: Record<string, string> = {
   open: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   in_progress: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  resolved: 'bg-green-500/10 text-green-400 border-green-500/20',
   closed: 'bg-green-500/10 text-green-400 border-green-500/20',
   on_hold: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
 }
 
-const priorityIcons: Record<string, React.ReactNode> = {
-  high: <AlertCircle className="h-4 w-4 text-red-400" />,
-  medium: <Clock className="h-4 w-4 text-yellow-400" />,
-  low: <CheckCircle className="h-4 w-4 text-green-400" />,
+const statusIcons: Record<string, React.ReactNode> = {
+  open: <AlertCircle className="h-4 w-4 text-blue-400" />,
+  in_progress: <Clock className="h-4 w-4 text-yellow-400" />,
+  resolved: <CheckCircle className="h-4 w-4 text-green-400" />,
+  closed: <CheckCircle className="h-4 w-4 text-green-400" />,
+}
+
+const priorityColors: Record<string, string> = {
+  high: 'text-red-400',
+  medium: 'text-yellow-400',
+  low: 'text-green-400',
 }
 
 export default function TicketsList({ isStaff = false }: TicketsListProps) {
@@ -113,6 +121,14 @@ export default function TicketsList({ isStaff = false }: TicketsListProps) {
           In Progress
         </Button>
         <Button
+          variant={filter === 'resolved' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setFilter('resolved')}
+          className="text-xs"
+        >
+          Resolved
+        </Button>
+        <Button
           variant={filter === 'closed' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setFilter('closed')}
@@ -146,11 +162,14 @@ export default function TicketsList({ isStaff = false }: TicketsListProps) {
                         <h3 className="font-medium text-foreground transition-colors group-hover:text-primary">
                           {ticket.title}
                         </h3>
-                        {priorityIcons[ticket.priority] && (
-                          <span title={ticket.priority}>
-                            {priorityIcons[ticket.priority]}
+                        {statusIcons[ticket.status] && (
+                          <span title={`Status: ${ticket.status.replace('_', ' ')}`}>
+                            {statusIcons[ticket.status]}
                           </span>
                         )}
+                        <span className={`text-[10px] uppercase tracking-wider font-bold ${priorityColors[ticket.priority] || 'text-muted-foreground'}`}>
+                          {ticket.priority}
+                        </span>
                       </div>
                       <p className="line-clamp-1 text-sm text-muted-foreground">
                         {ticket.description}

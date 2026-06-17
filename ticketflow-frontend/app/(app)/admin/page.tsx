@@ -119,13 +119,16 @@ export default function AdminPage() {
       <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div>
-              <h1 className="text-lg font-semibold tracking-tight text-foreground">
-                Admin Dashboard
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Manage all tickets and assignments
-              </p>
+            <div className="flex items-center gap-3">
+              <img src="/icon.svg" alt="Logo" className="h-8 w-8" />
+              <div>
+                <h1 className="text-lg font-semibold tracking-tight text-foreground">
+                  Admin Dashboard
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Manage all tickets and assignments
+                </p>
+              </div>
             </div>
             <Link href="/app">
               <Button variant="ghost" size="sm" className="gap-2">
@@ -185,6 +188,22 @@ export default function AdminPage() {
               className="text-xs"
             >
               In Progress ({inProgressCount})
+            </Button>
+            <Button
+              variant={filter === 'resolved' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('resolved')}
+              className="text-xs"
+            >
+              Resolved ({tickets.filter(t => t.status === 'resolved').length})
+            </Button>
+            <Button
+              variant={filter === 'closed' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('closed')}
+              className="text-xs"
+            >
+              Closed ({tickets.filter(t => t.status === 'closed').length})
             </Button>
           </div>
 

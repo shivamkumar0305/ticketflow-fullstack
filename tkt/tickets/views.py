@@ -27,11 +27,16 @@ class TicketsViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        queryset = Ticket.objects.all().order_by('-created_at')
 
-        if user.is_staff :
-            return Ticket.objects.all().order_by('-created_at')
+        if not user.is_staff:
+            queryset = queryset.filter(created_by=user)
         
-        return Ticket.objects.filter(created_by=user).order_by('-created_at')
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            queryset = queryset.filter(status=status_param)
+            
+        return queryset
     
     @action(
         detail=True,

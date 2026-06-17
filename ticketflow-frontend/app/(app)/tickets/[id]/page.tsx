@@ -33,12 +33,13 @@ interface Comment {
   created_at: string
 }
 
-const statusOptions = ['open', 'in_progress', 'on_hold', 'closed']
+const statusOptions = ['open', 'in_progress', 'on_hold', 'resolved', 'closed']
 const priorityOptions = ['low', 'medium', 'high']
 
 const statusColors: Record<string, string> = {
   open: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   in_progress: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+  resolved: 'bg-green-500/10 text-green-400 border-green-500/20',
   closed: 'bg-green-500/10 text-green-400 border-green-500/20',
   on_hold: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
 }
@@ -217,12 +218,15 @@ export default function TicketDetailPage() {
       <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to tickets
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <img src="/icon.svg" alt="Logo" className="h-8 w-8" />
+              <Link href="/">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to tickets
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
